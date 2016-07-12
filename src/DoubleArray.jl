@@ -1,74 +1,95 @@
 module DoubleArray
 
-export DoubleArray
+# base: offset for child node, i.e., child = parent.base + key
+# check: parent id
+immutable Node
+  base::Int
+  check::Int
+end
 
-include("node.jl")
+isused(n::Node) = n.check > 0
 
-"""
-    Double Array
-"""
-type DoubleArray{T}
+type Trie
   nodes::Vector{Node}
-  nextcheck::Int
   count::Int
+  #values::Vector{T}
+  base0::Int
 end
 
-length(da::DoubleArray) = da.count
-getindex(da::DoubleArray, key::Int) = da.nodes[key]
-setindex!(da::DoubleArray, value::Node, key::Int) = da.nodes[key] = value
+Base.length(trie::Trie) = length(trie.count)
 
-function distinct(i::Int, j::Int, depth::Int)
-  indices = Int[]
-  
+function Base.get(trie::Trie, key::Vector{Int}, default)
+  id = 1
+  for k in key
+    id = get(da, k, id, 0)
+    id == 0 && return default
+  end
+  -da[id].base - 1
 end
 
-function DoubleArray(data::Vector{Vector{Int}})
-  da = DoubleArray([Node(0,1)], 1, 0)
-  resize!(da.nodes, length(data)*2)
-  maxdepth = 0
-  items = [(1,1,length(data),1)]
+function Base.get(trie::Trie, id::Int, key::Int, default)
+  nextid = da[id].base + key
+  (nextid <= 0 || nextid > length(da)) && return default
+  this[nextid].check == id ? nextid : default
+end
+
+function Base.resize!(trie::Trie, len::Int)
+  n = length(trie.nodes)
+  resize!(trie.nodes, len)
+  for i = n+1:len
+    trie.nodes[i] = Node(0, 0)
+  end
+  trie
+end
+
+function Trie(data::Vector{Vector{Int}})
+  trie = Trie([Node(0,1)], 0, 1)
+  resize!(trie, length(data)*2)
+  items = [(1,0,length(data),1)]
+
   while length(items) > 0
-    parent, i, j, len = pop!(items)
-    depth > maxdepth && (maxdepth = depth)
-    hasleaf = length(data[i]) == depth
+    id, offset, len, k = pop!(items)
+    keys = Int[1+offset]
+    for i = 2:len
+      v = data[i+offset][k]
+      v != data[i+offset-1][k] && push!(keys, v)
+    end
+    base = findbase(trie, id, keys)
+    for k in keys
+      if k == 0 # leaf
+        trie.count += 1
+        #da.values[da.count] = value
+      else
+        trie.nodes[base+k] = Node(0, id)
+      end
+    end
 
-
+    for i = len:-1:1
+      key = data[i+offset][k]
+      nextid =　base + key
+      #(nextid, )
+      v = data[i+offset][k]
+    end
   end
-
-  da
+  trie
 end
 
-function append!(da::DoubleArray, parent::Int, codes::Vector{Int})
+function findbase(trie::Trie, id::Int, keys::Vector{Int})
   nonempty = 0
-  id = da.nextcheck - 1
+  base = trie.base0
+  nodes = trie.nodes
   while true
-    id += 1
-    base = id - codes[1]
-    while base + codes[end] >= da.count
-      resize!(da, da.count*2)
+    while base + keys[end] > length(nodes)
+      resize!(trie, length(nodes)*2)
     end
-    if isused(da[id])
-      nonempty += 1
-      continue
-    end
-    base < 0 && continue
-
-    if all(c -> !isused(da[base+c]), codes)
-      da[parent] = Node(base, da[parent].check)
-      for c in codes
-        if c == leafcode
-          da.count += 1
-          o = -da.count
-        else
-          o = 1
-        end
-        da[base+c] = Node(o, parent)
-      end
-      break
-    end
+    all(k -> k == 0 || !isused(nodes[base+k]), keys) && break
+    isused(nodes[base+keys[1]]) && (nonempty += 1)
+    base += 1
   end
-  alpha = nonEmpty / (id - da.nextcheck + 1)
-  alpha > 0.9 && (nextcheck = id)
+  nodes[id] = Node(base, nodes[id].check)
+  alpha = nonempty / (base - trie.base0 + 1)
+  alpha > 0.9 && (trie.base0 = base)
+  base
 end
 
 end
