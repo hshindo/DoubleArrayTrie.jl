@@ -17,21 +17,28 @@ length(da::DoubleArray) = da.count
 getindex(da::DoubleArray, key::Int) = da.nodes[key]
 setindex!(da::DoubleArray, value::Node, key::Int) = da.nodes[key] = value
 
+function distinct(i::Int, j::Int, depth::Int)
+  indices = Int[]
+  
+end
+
 function DoubleArray(data::Vector{Vector{Int}})
   da = DoubleArray([Node(0,1)], 1, 0)
-  resize!(da, length(data)*2)
+  resize!(da.nodes, length(data)*2)
+  maxdepth = 0
+  items = [(1,1,length(data),1)]
+  while length(items) > 0
+    parent, i, j, len = pop!(items)
+    depth > maxdepth && (maxdepth = depth)
+    hasleaf = length(data[i]) == depth
 
 
+  end
 
   da
 end
 
-function Base.resize!(da::DoubleArray, length::Int)
-  nodes = Array(Node, length)
-  da.nodes = copy!(nodes, da.nodes)
-end
-
-function append(da::DoubleArray, parent::Int, codes::Vector{Int})
+function append!(da::DoubleArray, parent::Int, codes::Vector{Int})
   nonempty = 0
   id = da.nextcheck - 1
   while true
@@ -61,7 +68,7 @@ function append(da::DoubleArray, parent::Int, codes::Vector{Int})
     end
   end
   alpha = nonEmpty / (id - da.nextcheck + 1)
-  alpha > 0.9 && nextcheck = id
+  alpha > 0.9 && (nextcheck = id)
 end
 
 end
