@@ -10,6 +10,7 @@ This is an illustration of trie structure.
 ```julia
 using DoubleArray
 
+trie = Trie()
 
 ```
 
