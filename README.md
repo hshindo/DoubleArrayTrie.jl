@@ -9,6 +9,10 @@ Trie is an ordered tree structure and can be used for dictionary-lookup.
 
 <p align="center"><img src="https://github.com/hshindo/DoubleArray.jl/blob/master/trie.png" width="250"></p>
 
+## Installation
+```julia
+```
+
 ## Double-Array
 Double-array contains two arrays: `base` and `check`.
 Given node id, the following conditions must be hold.
