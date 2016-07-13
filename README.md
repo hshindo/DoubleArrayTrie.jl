@@ -13,12 +13,11 @@ julia> Pkg.update()
 julia> Pkg.clone("https://github.com/hshindo/DoubleArrayTrie.jl.git")
 ```
 
-## Double-Array
-Double-array is an ordered tree structure that realizes a trie data structure.
+## Double Array
+Double-array is a fast implementation that realizes a trie data structure.
 Basically, it contains two internal arrays: `base` and `check`.
 
-Roughly speaking, `base` is an offset for child node indices.
-`check` is a flag to ensure that the child node exsits in a trie.
+Roughly speaking, `base` is an offset for child node indices and `check` is a flag to ensure that the child node exsits in a trie.
 
 More specifically, a double-array must keep the following conditions:
 * child = `base`[parent] + key
