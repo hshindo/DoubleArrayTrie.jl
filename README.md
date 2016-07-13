@@ -39,7 +39,7 @@ Looking up a key in a trie takes O(m) time where `m` is the key length.
 The main type of `DoubleArrayTrie.jl` is `DATrie{T}`.
 A type of key is `Vector{Int}` and that of value is `T`.
 
-For simplicity and efficiency, the package only supports _static_** construction, which means keys must be sorted beforehand and `DATrie` does not provide any functions to append/delete key-values.
+For simplicity and efficiency, the package only supports _static_ construction, which means keys must be sorted beforehand and `DATrie` does not provide any functions to append/delete key-values.
 
 Here is a quick example.
 ```julia
