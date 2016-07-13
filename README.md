@@ -41,6 +41,8 @@ A type of key is `Vector{Int}` and that of value is `T`.
 
 For simplicity and efficiency, the package only supports _static_ construction, which means keys must be sorted beforehand and `DATrie` does not provide any functions to append/delete key-values.
 
+For key lookup, use `get(trie, key::Vector{Int}, default)` function.
+
 Here is a quick example.
 ```julia
 using DoubleArrayTrie
