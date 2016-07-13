@@ -1,7 +1,11 @@
 module DoubleArrayTrie
 
-# base: offset for child node, i.e., child = parent.base + key
-# check: parent id
+export DATrie
+
+"""
+* child = parent.base + key
+* child.check == parent
+"""
 immutable Node
   base::Int
   check::Int
@@ -16,7 +20,7 @@ type DATrie{T}
   base0::Int
 end
 
-Base.length(trie::DATrie) = length(trie.count)
+Base.length(trie::DATrie) = trie.count
 
 function Base.get(trie::DATrie, keys::Vector{Int}, default)
   nodeid = 1
@@ -45,16 +49,25 @@ function Base.resize!(trie::DATrie, len::Int)
   trie
 end
 
+"""
+    DATrie{T}(keys, values)
+
+Construct DATrie.
+"""
 function DATrie{T}(keys::Vector{Vector{Int}}, values::Vector{T})
   @assert length(keys) == length(values)
-  count = length(keys)
-  trie = DATrie([Node(0,1)], values, count, 1)
-  resize!(trie, count*2)
-  items = [(1,1:count,1)]
+  # initialize
+  trie = DATrie([Node(0,1)], values, length(keys), 1)
+  resize!(trie, length(keys)*2)
+  keys = map(keys) do key
+    any(k -> k <= 0, key) && throw("Key must be positive.")
+    push!(copy(key), 0) # append '0' to the end
+  end
 
+  items = [(1,1:length(trie),1)]
   while length(items) > 0
     nodeid, range, depth = pop!(items)
-    # subrange
+
     subranges = Range[]
     k = first(range)
     for i in range
@@ -70,7 +83,7 @@ function DATrie{T}(keys::Vector{Vector{Int}}, values::Vector{T})
     for i = length(subranges):-1:1
       r = subranges[i]
       key = keys[first(r)][depth]
-      key == 0 && continue
+      key == 0 && continue # leaf
       push!(items, (base+key, r, depth+1))
     end
   end

@@ -36,12 +36,31 @@ and so on. Note that `#` indicates undefined value.
 Looking up a key in a trie takes O(m) time where `m` is the key length.
 
 ## Usage
+The main type of `DoubleArrayTrie.jl` is `DATrie{T}`.
+A type of key is `Vector{Int}` and that of value is `T`.
+
+For simplicity and efficiency, the package only supports _static_** construction, which means keys must be sorted beforehand and `DATrie` does not provide any functions to append/delete key-values.
+
+Here is a quick example.
 ```julia
 using DoubleArrayTrie
 
+# Please download "words.txt" from "DoubleArrayTrie/test/words.txt"
+lines = open(readlines, "<path>/words.txt")
+sort!(lines)
 
-trie = DATrie()
+words = map(chomp, lines)
+keys = map(w -> [Int(c) for c in w], words)
+trie = DATrie(keys, words)
 
+for i = 1:length(words)
+  v = get(trie, keys[i], "")
+  if v == words[i]
+    println(v)
+  else
+    error("Key not found: $(keys[i]).")
+  end
+end
 ```
 
 ## References
