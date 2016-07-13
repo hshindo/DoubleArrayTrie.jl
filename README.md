@@ -22,8 +22,7 @@ In double-array, the following conditions must be hold.
 * child_id = base[id] + key
 * check[child_id] == id
 
-<img src="https://github.com/hshindo/DoubleArray.jl/blob/master/trie_internal.png" width="250">
-<img src="https://github.com/hshindo/DoubleArray.jl/blob/master/doublearray.png" width="300">
+<p align="center"><img src="https://github.com/hshindo/DoubleArray.jl/blob/master/doublearray.png" width="200"></p>
 
 In the example,
 * 2 = base[1] + 1
