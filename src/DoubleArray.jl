@@ -9,28 +9,31 @@ end
 
 isused(n::Node) = n.check > 0
 
-type Trie
+type Trie{T}
   nodes::Vector{Node}
+  values::Vector{T}
   count::Int
-  #values::Vector{T}
   base0::Int
 end
 
 Base.length(trie::Trie) = length(trie.count)
 
-function Base.get(trie::Trie, key::Vector{Int}, default)
-  id = 1
-  for k in key
-    id = get(da, k, id, 0)
-    id == 0 && return default
+function Base.get(trie::Trie, keys::Vector{Int}, default)
+  nodeid = 1
+  for k in keys
+    nodeid = get(trie, nodeid, k, 0)
+    #println(nodeid)
+    nodeid == 0 && return default
   end
-  -da[id].base - 1
+  nodeid = get(trie, nodeid, 0, 0)
+  @assert nodeid != 0
+  trie.values[trie.nodes[nodeid].base]
 end
 
-function Base.get(trie::Trie, id::Int, key::Int, default)
-  nextid = da[id].base + key
-  (nextid <= 0 || nextid > length(da)) && return default
-  this[nextid].check == id ? nextid : default
+function Base.get(trie::Trie, nodeid::Int, key::Int, default)
+  nextid = trie.nodes[nodeid].base + key
+  (nextid <= 0 || nextid > length(trie.nodes)) && return default
+  trie.nodes[nextid].check == nodeid ? nextid : default
 end
 
 function Base.resize!(trie::Trie, len::Int)
@@ -42,39 +45,39 @@ function Base.resize!(trie::Trie, len::Int)
   trie
 end
 
-function Trie(data::Vector{Vector{Int}})
-  trie = Trie([Node(0,1)], 0, 1)
-  resize!(trie, length(data)*2)
-  items = [(1,0,length(data),1)]
+function Trie{T}(keys::Vector{Vector{Int}}, values::Vector{T})
+  @assert length(keys) == length(values)
+  count = length(keys)
+  trie = Trie([Node(0,1)], values, count, 1)
+  resize!(trie, count*2)
+  items = [(1,1:count,1)]
 
   while length(items) > 0
-    id, offset, len, k = pop!(items)
-    keys = Int[1+offset]
-    for i = 2:len
-      v = data[i+offset][k]
-      v != data[i+offset-1][k] && push!(keys, v)
+    nodeid, range, depth = pop!(items)
+    # subrange
+    subranges = Range[]
+    k = first(range)
+    for i in range
+      keys[i][depth] == keys[k][depth] && continue
+      push!(subranges, k:i-1)
+      k = i
     end
-    base = findbase(trie, id, keys)
-    for k in keys
-      if k == 0 # leaf
-        trie.count += 1
-        #da.values[da.count] = value
-      else
-        trie.nodes[base+k] = Node(0, id)
-      end
-    end
+    push!(subranges, k:last(range))
 
-    for i = len:-1:1
-      key = data[i+offset][k]
-      nextid =　base + key
-      #(nextid, )
-      v = data[i+offset][k]
+    child_keys = map(r -> keys[first(r)][depth], subranges)
+    base = append!(trie, nodeid, first(range), child_keys)
+
+    for i = length(subranges):-1:1
+      r = subranges[i]
+      key = keys[first(r)][depth]
+      key == 0 && continue
+      push!(items, (base+key, r, depth+1))
     end
   end
   trie
 end
 
-function findbase(trie::Trie, id::Int, keys::Vector{Int})
+function append!(trie::Trie, nodeid::Int, keyid::Int, keys::Vector{Int})
   nonempty = 0
   base = trie.base0
   nodes = trie.nodes
@@ -82,11 +85,14 @@ function findbase(trie::Trie, id::Int, keys::Vector{Int})
     while base + keys[end] > length(nodes)
       resize!(trie, length(nodes)*2)
     end
-    all(k -> k == 0 || !isused(nodes[base+k]), keys) && break
+    all(k -> !isused(nodes[base+k]), keys) && break
     isused(nodes[base+keys[1]]) && (nonempty += 1)
     base += 1
   end
-  nodes[id] = Node(base, nodes[id].check)
+  nodes[nodeid] = Node(base, nodes[nodeid].check)
+  for k in keys
+    nodes[base+k] = Node(keyid, nodeid)
+  end
   alpha = nonempty / (base - trie.base0 + 1)
   alpha > 0.9 && (trie.base0 = base)
   base
