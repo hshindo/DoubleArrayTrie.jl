@@ -1,4 +1,8 @@
 ## DoubleArrayTrie.jl
+
+[![Build Status](https://travis-ci.org/hshindo/DoubleArrayTrie.jl.svg?branch=master)](https://travis-ci.org/hshindo/DoubleArrayTrie.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/hshindo/DoubleArrayTrie.jl?branch=master)](https://ci.appveyor.com/project/hshindo/DoubleArrayTrie-jl/branch/master)
+
 Double Array is a data structure for trie structure implementation.
 Trie (a.k.a. radix tree or prefix tree) is an ordered tree structure as the following illustration.
 
