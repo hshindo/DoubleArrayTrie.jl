@@ -14,7 +14,7 @@ julia> Pkg.clone("https://github.com/hshindo/DoubleArrayTrie.jl.git")
 ```
 
 ## Double Array
-Double-array is a fast implementation that realizes a trie data structure.
+Double-array is a fast implementation that realizes a [trie](https://en.wikipedia.org/wiki/Trie) data structure.
 Basically, it contains two internal arrays: `base` and `check`.
 
 Roughly speaking, `base` is an offset value for child node indices and `check` is a flag to ensure that the child node exsits in a trie.
