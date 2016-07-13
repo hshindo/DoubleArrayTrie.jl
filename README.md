@@ -30,12 +30,10 @@ In the above example,
 * check[3] == 1
 * 4 = base[3] + 4
 * check[4] == 3
-and so on. Note that `#` indicates undefined.
+
+and so on. Note that `#` indicates undefined value.
 
 Looking up a key in a trie takes O(m) time where `m` is the key length.
-
-* Prefix match
-Double array can be used for associative array.
 
 ## Usage
 ```julia
