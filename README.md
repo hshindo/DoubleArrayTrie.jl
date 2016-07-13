@@ -4,6 +4,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/github/hshindo/DoubleArrayTrie.jl?branch=master)](https://ci.appveyor.com/project/hshindo/DoubleArrayTrie-jl/branch/master)
 
 This package implements a double-array trie in [Julia](http://julialang.org/).
+
 Double-array is a fast implementation of trie data structure.
 Trie is an ordered tree structure and can be used for dictionary-lookup.
 
