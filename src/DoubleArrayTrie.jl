@@ -1,4 +1,4 @@
-module DoubleArray
+module DoubleArrayTrie
 
 # base: offset for child node, i.e., child = parent.base + key
 # check: parent id

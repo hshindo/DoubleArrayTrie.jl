@@ -1,4 +1,4 @@
-## DoubleArray.jl
+## DoubleArrayTrie.jl
 Double Array is a data structure for trie structure implementation.
 Trie (a.k.a. radix tree or prefix tree) is an ordered tree structure as the following illustration.
 
@@ -10,7 +10,7 @@ Double array can be used for associative array.
 
 ## Usage
 ```julia
-using DoubleArray
+using DoubleArrayTrie
 
 trie = Trie()
 
