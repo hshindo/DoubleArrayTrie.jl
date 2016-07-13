@@ -17,9 +17,9 @@ julia> Pkg.clone("https://github.com/hshindo/DoubleArrayTrie.jl.git")
 Double-array is a fast implementation that realizes a trie data structure.
 Basically, it contains two internal arrays: `base` and `check`.
 
-Roughly speaking, `base` is an offset for child node indices and `check` is a flag to ensure that the child node exsits in a trie.
+Roughly speaking, `base` is an offset value for child node indices and `check` is a flag to ensure that the child node exsits in a trie.
 
-More specifically, a double-array must keep the following conditions:
+More specifically, a double-array is constructed as the following conditions hold.
 * child = `base`[parent] + key
 * `check`[child] == parent
 
@@ -38,6 +38,7 @@ Looking up a key in a trie takes O(m) time where `m` is the key length.
 ## Usage
 ```julia
 using DoubleArrayTrie
+
 
 trie = DATrie()
 
