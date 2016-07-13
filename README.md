@@ -5,9 +5,6 @@
 
 This package implements a double-array trie in [Julia](http://julialang.org/).
 
-Double-array is a fast implementation of trie data structure.
-Trie is an ordered tree structure and can be used for dictionary-lookup.
-
 <p align="center"><img src="https://github.com/hshindo/DoubleArray.jl/blob/master/trie.png" width="250"></p>
 
 ## Installation
@@ -17,8 +14,11 @@ julia> Pkg.clone("https://github.com/hshindo/DoubleArrayTrie.jl.git")
 ```
 
 ## Double-Array
-Double-array contains two arrays: `base` and `check`.
-Given node id, the following conditions must be hold.
+Double-array is an ordered tree structure that realizes a trie data structure.
+
+It contains two arrays: `base` and `check`.
+
+In double-array, the following conditions must be hold.
 * child_id = base[id] + key
 * check[child_id] == id
 
