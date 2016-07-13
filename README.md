@@ -22,6 +22,15 @@ In double-array, the following conditions must be hold.
 * child_id = base[id] + key
 * check[child_id] == id
 
+<p align="center"><img src="https://github.com/hshindo/DoubleArray.jl/blob/master/trie_internal.png" width="250"></p>
+<p align="center"><img src="https://github.com/hshindo/DoubleArray.jl/blob/master/doublearray.png" width="250"></p>
+
+In the example,
+* 2 = base[1] + 1
+* check[2] == 1
+* 3 = base[2] + 2
+* check[3] == 2
+
 Looking up a key in a trie takes O(m) time where `m` is the key length.
 
 * Prefix match
