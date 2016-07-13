@@ -23,7 +23,7 @@ More specifically, a double-array must keep the following conditions:
 * child = `base`[parent] + key
 * `check`[child] == parent
 
-<p align="center"><img src="https://github.com/hshindo/DoubleArray.jl/blob/master/doublearray.png" width="500"></p>
+<p align="center"><img src="https://github.com/hshindo/DoubleArray.jl/blob/master/doublearray.png" width="600"></p>
 
 In the above example,
 * 3 = base[1] + 2
