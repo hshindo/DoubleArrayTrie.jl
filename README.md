@@ -15,20 +15,23 @@ julia> Pkg.clone("https://github.com/hshindo/DoubleArrayTrie.jl.git")
 
 ## Double-Array
 Double-array is an ordered tree structure that realizes a trie data structure.
+Basically, it contains two internal arrays: `base` and `check`.
 
-It contains two arrays: `base` and `check`.
+Roughly speaking, `base` is an offset for child node indices.
+`check` is a flag to ensure that the child node exsits in a trie.
 
-In double-array, the following conditions must be hold.
-* child_id = base[id] + key
-* check[child_id] == id
+More specifically, a double-array must keep the following conditions:
+* child = `base`[parent] + key
+* `check`[child] == parent
 
 <p align="center"><img src="https://github.com/hshindo/DoubleArray.jl/blob/master/doublearray.png" width="500"></p>
 
-In the example,
-* 2 = base[1] + 1
-* check[2] == 1
-* 3 = base[2] + 2
-* check[3] == 2
+In the above example,
+* 3 = base[1] + 2
+* check[3] == 1
+* 4 = base[3] + 4
+* check[4] == 3
+and so on. Note that `#` indicates undefined.
 
 Looking up a key in a trie takes O(m) time where `m` is the key length.
 
