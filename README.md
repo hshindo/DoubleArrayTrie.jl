@@ -20,8 +20,8 @@ Basically, it contains two internal arrays: `base` and `check`.
 Roughly speaking, `base` is an offset value for child node indices and `check` is a flag to ensure that the child node exsits in a trie.
 
 More specifically, a double-array is constructed as the following conditions hold.
-* child = `base`[parent] + key
-* `check`[child] == parent
+* child = base[parent] + key
+* check[child] == parent
 
 <p align="center"><img src="https://github.com/hshindo/DoubleArray.jl/blob/master/doublearray.png" width="600"></p>
 
