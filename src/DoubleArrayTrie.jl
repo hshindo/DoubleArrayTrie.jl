@@ -9,16 +9,16 @@ end
 
 isused(n::Node) = n.check > 0
 
-type Trie{T}
+type DATrie{T}
   nodes::Vector{Node}
   values::Vector{T}
   count::Int
   base0::Int
 end
 
-Base.length(trie::Trie) = length(trie.count)
+Base.length(trie::DATrie) = length(trie.count)
 
-function Base.get(trie::Trie, keys::Vector{Int}, default)
+function Base.get(trie::DATrie, keys::Vector{Int}, default)
   nodeid = 1
   for k in keys
     nodeid = get(trie, nodeid, k, 0)
@@ -30,13 +30,13 @@ function Base.get(trie::Trie, keys::Vector{Int}, default)
   trie.values[trie.nodes[nodeid].base]
 end
 
-function Base.get(trie::Trie, nodeid::Int, key::Int, default)
+function Base.get(trie::DATrie, nodeid::Int, key::Int, default)
   nextid = trie.nodes[nodeid].base + key
   (nextid <= 0 || nextid > length(trie.nodes)) && return default
   trie.nodes[nextid].check == nodeid ? nextid : default
 end
 
-function Base.resize!(trie::Trie, len::Int)
+function Base.resize!(trie::DATrie, len::Int)
   n = length(trie.nodes)
   resize!(trie.nodes, len)
   for i = n+1:len
@@ -45,10 +45,10 @@ function Base.resize!(trie::Trie, len::Int)
   trie
 end
 
-function Trie{T}(keys::Vector{Vector{Int}}, values::Vector{T})
+function DATrie{T}(keys::Vector{Vector{Int}}, values::Vector{T})
   @assert length(keys) == length(values)
   count = length(keys)
-  trie = Trie([Node(0,1)], values, count, 1)
+  trie = DATrie([Node(0,1)], values, count, 1)
   resize!(trie, count*2)
   items = [(1,1:count,1)]
 
@@ -77,7 +77,7 @@ function Trie{T}(keys::Vector{Vector{Int}}, values::Vector{T})
   trie
 end
 
-function append!(trie::Trie, nodeid::Int, keyid::Int, keys::Vector{Int})
+function append!(trie::DATrie, nodeid::Int, keyid::Int, keys::Vector{Int})
   nonempty = 0
   base = trie.base0
   nodes = trie.nodes
