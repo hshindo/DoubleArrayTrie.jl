@@ -1,1 +1,1 @@
-using DoubleArray
+using DoubleArrayTrie
