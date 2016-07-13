@@ -11,6 +11,7 @@ Trie is an ordered tree structure and can be used for dictionary-lookup.
 
 ## Installation
 ```julia
+julia> Pkg.clone("https://github.com/hshindo/DoubleArrayTrie.jl.git")
 ```
 
 ## Double-Array
